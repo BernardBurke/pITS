@@ -1,38 +1,15 @@
+import helpers
 import asyncio
-import time
 
 
-async def wait_host_port(host, port, duration=10, delay=2):
-    """Repeatedly try if a port on a host is open until duration seconds passed
-    
-    Parameters
-    ----------
-    host : str
-        host ip address or hostname
-    port : int
-        port number
-    duration : int, optional
-        Total duration in seconds to wait, by default 10
-    delay : int, optional
-        delay in seconds between each try, by default 2
-    
-    Returns
-    -------
-    awaitable bool
-    """
-    tmax = time.time() + duration
-    while time.time() < tmax:
-        try:
-            _reader, writer = await asyncio.wait_for(asyncio.open_connection(host, port), timeout=5)
-            writer.close()
-            await writer.wait_closed()
-            return True
-        except:
-            if delay:
-                await asyncio.sleep(delay)
-    return False
+ipList = helpers.get_subnet_addresses('172.23.16.1','24')
+
+for ip in ipList:
+    print(ip)
+
+exit()
 
 loop = asyncio.get_event_loop()
-status = loop.run_until_complete(wait_host_port("www.google.com",81,1,1))
+status = loop.run_until_complete(helpers.wait_host_port("www.google.com",80,1,1))
 
 print("status", status)
