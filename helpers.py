@@ -28,7 +28,7 @@ async def wait_host_port(host, port, duration=10, delay=2):
     tmax = time.time() + duration
     while time.time() < tmax:
         try:
-            _reader, writer = await asyncio.wait_for(asyncio.open_connection(host, port), timeout=5)
+            _reader, writer = await asyncio.wait_for(asyncio.open_connection(host, port), timeout=1)
             writer.close()
             await writer.wait_closed()
             return True
